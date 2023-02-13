@@ -41,8 +41,7 @@ int main(){
     cout << "Membes of class A is: " << *pObj << endl;
 
     char const* constVal = "Char value cannot be changed";
-    // char x = "chd";
-    // char const& constRef = *x;
+    char const &constRef = *constVal;
 
     // Array of triplets
     int arr[][3] = {1, 2, 3, 4, 5, 6, 7};
