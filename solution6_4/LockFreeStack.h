@@ -65,11 +65,16 @@ Stack::push(int val)
     auto item = new StackItem(val);
     StackHead expected = head.load();
     StackHead newhead;
-    newhead.link = item;
-    newhead.count = expected.count + 1;
-    newhead.link->next = expected.link;
-    head = newhead;
-    delete expected.link;
+    bool succeeded = false;
+    
+    while(!succeeded)
+    {
+      newhead.link = item;
+      newhead.count = expected.count + 1;
+      newhead.link->next = expected.link;
+      succeeded = head.compare_exchange_weak(expected, newhead);
+    }
+    // delete expected.link;
 }
 }
 #endif

@@ -17,40 +17,73 @@ class A {
 struct B {
     int i;
     double j;
-    void foo(double);
-    void bar(double);
+    int bfunc (int *b){
+        cout<<"Function exec from B \n";
+        return ((*b)+5);
+    }
+    int bffunc (double (*a)(float &)){
+        cout<<"Invoking function a from B bfunc :: \n";
+        float param = 1.2;
+        return int(a(param));
+    }
 };
 
-int func(float a, int b){
-    return a+b;
+char* c_func(char* a, char* b){
+    if(a[0] == 'a'){
+        return a;
+    } else {
+        return b;
+    }
+}
+
+int func2(){
+    return -1;
+}
+
+double func(float &x){
+    x -= 1;
+    return x / 1.2;
+}
+
+void func3(void (*f)()){
+    cout<<"Calling function that is passed\n";
+    f();
 }
 
 int main(){
     int i = 5;
+    /* int * */
     int *ip = &i;
     cout<<"Before changing int ref: "<<i<<endl;
+    /* int & */
     int &ir = i;
     // Assign new value to x using ref
     ir = 20;
     cout<<"After changing int ref: "<<i<<endl;
 
+    /* double */
     double d = 1.2;
 
+    /* A * (A is any appropriate class). */
     A a(1, 2.6);
     A *pObj = &a;
     cout << "Membes of class A is: " << *pObj << endl;
 
+    /* char const * */
     char const* constVal = "Char value cannot be changed";
+    /* char const & */
     char const &constRef = *constVal;
 
-    // Array of triplets
-    int arr[][3] = {1, 2, 3, 4, 5, 6, 7};
-    cout<<"No of triplets in arr"<<endl;
-    cout << "sizeof(ar) / sizeof(int[3]) : "<< sizeof(arr) / sizeof(int[3]) << endl;
+    /* long[7] */
+    long larr[7] = {};
 
+    /* int ** */
     int **ipp = &ip;
+
+    /* int *& */
     int *&ipr = ip;
 
+    /* float & */
     float fval = 1.2;
     cout<<"Before changing float ref: "<<fval<<endl;
     float &fref = fval;
@@ -58,12 +91,37 @@ int main(){
     fref = 3.6;
     cout<<"After changing float ref: "<<fval<<endl;
 
-    int (*pt2func)(float, int) = NULL;
-    pt2func = &func;
-    cout<<"Printing result of func \n";
-    cout<<(*pt2func)(1.2, 3)<<endl;
+     /* int (*)() */
+    int (*pt2func2)() = NULL;
+    pt2func2 = &func2;
+    cout<<"Printing result of func2 \n" << (*pt2func2)();
 
+    /* int (*&)() */
+    int (*&ppt2func2)() = pt2func2;
+
+    /* char *(*)(char *, char *) */
+    char *(*cptrfunc)(char*, char*) = &c_func;
+    char ca = 'a', cb = 'b';
+    cout<<"Printing result of c func " << *cptrfunc(&ca, &cb)<<endl;
+
+    /* int A::* */
     int B::*bip = &B::i;
+
+    /* int (A::*)(int *) */
+    int (B::*bfuncp)(int *) = &B::bfunc;
     
+    /* int (A::**)(int *) */
+    int (B::**bfuncpp)(int *) = &bfuncp;
+
+    /* int (A::*&)(int *) */
+    int (B::*&bfuncpp)(int *) = bfuncp;
+
+    /* int (A::*)(double (*)(float &)) */
+    int (B::*bffuncp)(double (*)(float &)) = &B::bffunc;
+
+    /* void (*p[10]) (void (*)() ) */
+    void (*p[10]) (void (*)() ) = {func3, func3, func3, func3, func3, func3, func3, func3, func3, func3};
+    
+
     return 0;
 }

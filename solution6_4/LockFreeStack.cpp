@@ -12,5 +12,7 @@ int main()
   ls->push(6);
   //ls.push(3);
   cout<<ls->pop()<<endl;
+  cout<<ls->pop()<<endl;
+  cout<<ls->pop()<<endl;
   return 0;
 }
