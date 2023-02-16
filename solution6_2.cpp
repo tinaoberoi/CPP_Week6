@@ -45,9 +45,14 @@ double func(float &x){
     return x / 1.2;
 }
 
-void func3(void (*f)()){
+void func3(void (*f)()) {
     cout<<"Calling function that is passed\n";
     f();
+}
+
+void func4() {
+    cout<<"Function passed executed\n";
+
 }
 
 int main(){
@@ -104,24 +109,35 @@ int main(){
     char ca = 'a', cb = 'b';
     cout<<"Printing result of c func " << *cptrfunc(&ca, &cb)<<endl;
 
+    B b;
     /* int A::* */
     int B::*bip = &B::i;
+    cout<<"Incrementing this pointer from :: "<< (b.*bip)<<"to :: "<<(b.*bip)++<<endl;
 
     /* int (A::*)(int *) */
     int (B::*bfuncp)(int *) = &B::bfunc;
-    
+    cout<<"Calling b func pointer\n";
+    (b.*bfuncp)(ip);
+
     /* int (A::**)(int *) */
     int (B::**bfuncpp)(int *) = &bfuncp;
+    cout<<"Calling b func pointer pointer\n";
+    (b.**bfuncpp)(ip);
 
     /* int (A::*&)(int *) */
-    int (B::*&bfuncpp)(int *) = bfuncp;
+    int (B::*&bfuncppref)(int *) = bfuncp;
+    cout<<"Calling b func pointer pointer\n";
+    (b.*bfuncppref)(ip);
 
     /* int (A::*)(double (*)(float &)) */
     int (B::*bffuncp)(double (*)(float &)) = &B::bffunc;
+    cout<<"Calling b func pointer that calls another function\n";
+    (b.*bffuncp)(func);
 
     /* void (*p[10]) (void (*)() ) */
     void (*p[10]) (void (*)() ) = {func3, func3, func3, func3, func3, func3, func3, func3, func3, func3};
-    
+    p[5](&func4);
+
 
     return 0;
 }
